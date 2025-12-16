@@ -57,6 +57,7 @@ export default function App() {
   const [products, setProducts] = useState<Product[]>([]);
   const [orderHistory, setOrderHistory] = useState<Order[]>([]);
   const [inventory, setInventory] = useState<Inventory>({});
+  const [isLoading, setIsLoading] = useState(true); // Loading state
 
   // Helper Toast
   const showToast = (message: string) => {
@@ -75,6 +76,7 @@ export default function App() {
   useEffect(() => {
     const unsubscribe = subscribeToProducts((data) => {
       setProducts(data);
+      setIsLoading(false); // Data loaded
     });
     return () => unsubscribe();
   }, []);
@@ -304,6 +306,17 @@ export default function App() {
       updateProductDetails(updatedProduct);
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[#0f172a] font-sans flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-pink-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <h2 className="text-white text-xl font-bold animate-pulse">Loading Cosmetic King...</h2>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#0f172a] font-sans flex justify-center overflow-hidden">

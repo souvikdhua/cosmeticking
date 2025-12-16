@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, doc, onSnapshot, setDoc, addDoc, updateDoc, getDocs, query, orderBy, writeBatch } from "firebase/firestore";
+import { getFirestore, collection, doc, onSnapshot, setDoc, addDoc, updateDoc, getDocs, query, orderBy, writeBatch, limit } from "firebase/firestore";
 import { Product, Order, Inventory } from "../types";
 
 const firebaseConfig = {
@@ -104,7 +104,10 @@ export const clearHistory = async () => {
 // --- Seeding ---
 
 export const seedInitialData = async (products: Product[]) => {
-    const snapshot = await getDocs(collection(db, "products"));
+    // Optimization: Check only 1 doc to see if collection is empty
+    const q = query(collection(db, "products"), limit(1));
+    const snapshot = await getDocs(q);
+
     if (snapshot.empty) {
         console.log("Seeding database...");
         const batch = writeBatch(db);
