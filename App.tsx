@@ -44,7 +44,7 @@ export default function App() {
 
   const [newProductForm, setNewProductForm] = useState<NewProductForm>({
     name: "",
-    price: "",
+    mrp: "",
     category: "Hair Care",
     brand: "",
     size: "",
@@ -246,19 +246,20 @@ export default function App() {
   };
 
   const handleAddNewProduct = () => {
-    if (!newProductForm.name || !newProductForm.price) {
-      showToast("Name and Price are required");
+    if (!newProductForm.name || !newProductForm.mrp) {
+      showToast("Name and MRP are required");
       return;
     }
-    const price = parseInt(newProductForm.price);
+    const mrp = parseInt(newProductForm.mrp);
     const initialStock = parseInt(newProductForm.stock) || 0;
     const initialOff = parseInt(newProductForm.off) || 0;
+    const price = Math.floor(mrp * (1 - initialOff / 100));
 
     const newProduct: Product = {
       id: Date.now(),
       name: newProductForm.name,
-      price: price,
-      mrp: Math.floor(price * (1 + (initialOff + 10) / 100)), // Approximate MRP logic
+      price: price, // Calculated selling price
+      mrp: mrp,
       off: initialOff,
       category: newProductForm.category,
       brand: newProductForm.brand || "Generic",
@@ -275,11 +276,16 @@ export default function App() {
     firebaseUpdateStock(newInventory);
 
     setNewProductForm({
-      name: "", price: "", category: "Hair Care", brand: "", size: "", desc: "",
+      name: "", mrp: "", category: "Hair Care", brand: "", size: "", desc: "",
       stock: "50", off: "0"
     });
     setIsAddingProduct(false);
     showToast("Product Created in Cloud!");
+  };
+
+  const handleUpdateProduct = (product: Product) => {
+    updateProductDetails(product);
+    showToast("Product Updated!");
   };
 
   const handleRemoveProduct = (id: number) => {
@@ -406,6 +412,7 @@ export default function App() {
                 onClearHistory={clearHistory}
                 onUpdateStock={handleUpdateStock}
                 onUpdateDiscount={handleUpdateDiscount}
+                onUpdateProduct={handleUpdateProduct}
                 onRemoveProduct={handleRemoveProduct}
                 onImageUpload={handleImageUpload}
                 editingProductId={editingProductId}

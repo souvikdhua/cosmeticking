@@ -32,7 +32,7 @@ export type ProfileTabState = 'history' | 'inventory';
 
 export interface NewProductForm {
   name: string;
-  price: string;
+  mrp: string;
   category: string;
   brand: string;
   size: string;
