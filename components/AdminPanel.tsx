@@ -163,8 +163,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 />
                 <div className="flex gap-3">
                   <input
-                    type="number" placeholder="Price" className="w-1/2 bg-black/20 text-white rounded-lg p-3 text-sm outline-none border border-white/5"
-                    value={newProductForm.price} onChange={e => setNewProductForm({ ...newProductForm, price: e.target.value })}
+                    type="number" placeholder="MRP" className="w-1/2 bg-black/20 text-white rounded-lg p-3 text-sm outline-none border border-white/5"
+                    value={newProductForm.mrp} onChange={e => setNewProductForm({ ...newProductForm, mrp: e.target.value })}
                   />
                   <select
                     className="w-1/2 bg-black/20 text-white rounded-lg p-3 text-sm outline-none border border-white/5"
